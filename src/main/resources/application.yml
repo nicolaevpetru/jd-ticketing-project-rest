@@ -1,12 +1,12 @@
 server:
-  port: 9091
+  port: 8081
 spring:
   application:
     name: ticketing-project-rest
   profiles:
     active: default
   datasource:
-    url: jdbc:postgresql://localhost:5432/qa
+    url: jdbc:postgresql://localhost:5432/dev
     username: postgres
     password: admin
     driver-class-name: org.postgresql.Driver
