@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class UserPrincipal implements UserDetails {
+
     private User user;
 
     public UserPrincipal(User user) {
@@ -18,15 +19,18 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         List<GrantedAuthority> authorityList = new ArrayList<>();
+
         GrantedAuthority authority = new SimpleGrantedAuthority(this.user.getRole().getDescription());
         authorityList.add(authority);
 
-        // if ManyToMany DB relationship
-//        this.user.getRole().forEach(role -> {
+//         ManyToMany
+//        this.user.getRoles().forEach(role ->{
 //            GrantedAuthority authority = new SimpleGrantedAuthority(this.user.getRole().getDescription());
 //            authorityList.add(authority);
 //        })
+
         return authorityList;
     }
 
