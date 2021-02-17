@@ -6,7 +6,6 @@ import com.ticketing.dto.UserDTO;
 import com.ticketing.entity.User;
 import com.ticketing.exception.TicketingProjectException;
 import com.ticketing.mapper.MapperUtil;
-import com.ticketing.mapper.UserMapper;
 import com.ticketing.repository.UserRepository;
 import com.ticketing.service.ProjectService;
 import com.ticketing.service.TaskService;
@@ -50,12 +49,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(UserDTO dto) {
+    public UserDTO save(UserDTO dto) throws TicketingProjectException {
+
         User foundUser = userRepository.findByUserName(dto.getUserName());
-        dto.setEnabled(true);
-        User obj = mapperUtil.convert(dto, new User());
-        obj.setPassWord(passwordEncoder.encode(obj.getPassWord()));
-        userRepository.save(obj);
+
+        if (foundUser != null) {
+            throw new TicketingProjectException("User already exists");
+        }
+
+        User user = mapperUtil.convert(dto, new User());
+        user.setPassWord(passwordEncoder.encode(user.getPassWord()));
+
+        User save = userRepository.save(user);
+
+        return mapperUtil.convert(save, new UserDTO());
+
     }
 
     @Override
@@ -65,7 +73,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserName(dto.getUserName());
         //Map update user dto to entity object
         User convertedUser = mapperUtil.convert(dto, new User());
-
         convertedUser.setPassWord(passwordEncoder.encode(convertedUser.getPassWord()));
         convertedUser.setEnabled(true);
 
@@ -124,4 +131,14 @@ public class UserServiceImpl implements UserService {
                 return true;
         }
     }
+
+    @Override
+    public UserDTO confirm(User user) {
+
+        user.setEnabled(true);
+        User confirmedUser = userRepository.save(user);
+
+        return mapperUtil.convert(confirmedUser, new UserDTO());
+    }
+
 }
