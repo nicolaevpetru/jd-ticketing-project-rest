@@ -1,5 +1,6 @@
 package com.ticketing.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ticketing.enums.Status;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Where(clause = "is_deleted=false")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"},ignoreUnknown = true)
 public class Project extends BaseEntity {
 
     @Column(unique = true)

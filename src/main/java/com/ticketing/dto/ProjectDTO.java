@@ -1,5 +1,6 @@
 package com.ticketing.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ticketing.enums.Status;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"},ignoreUnknown = true)
 public class ProjectDTO {
 
     private Long id;
