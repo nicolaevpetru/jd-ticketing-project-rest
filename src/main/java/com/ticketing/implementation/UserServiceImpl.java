@@ -67,10 +67,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO update(UserDTO dto) {
+    public UserDTO update(UserDTO dto) throws TicketingProjectException {
 
         //Find current user
         User user = userRepository.findByUserName(dto.getUserName());
+
+        if (user == null) {
+            throw new TicketingProjectException("User Does Not Exists");
+        }
         //Map update user dto to entity object
         User convertedUser = mapperUtil.convert(dto, new User());
         convertedUser.setPassWord(passwordEncoder.encode(convertedUser.getPassWord()));
@@ -140,5 +144,4 @@ public class UserServiceImpl implements UserService {
 
         return mapperUtil.convert(confirmedUser, new UserDTO());
     }
-
 }

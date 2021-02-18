@@ -69,11 +69,36 @@ public class UserController {
 
     @GetMapping("/{username}")
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
-    @Operation(summary = "Read all users")
+    @Operation(summary = "Read user")
     public ResponseEntity<ResponseWrapper> readByUsername(@PathVariable("username") String username) {
 
         UserDTO user = userService.findByUserName(username);
         return ResponseEntity.ok(new ResponseWrapper("Successfully retrieved the user", user));
+    }
+
+    @PutMapping
+    @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
+    @Operation(summary = "Update user")
+    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO user) throws TicketingProjectException {
+        UserDTO updateUser = userService.update(user);
+        return ResponseEntity.ok(new ResponseWrapper("Successfully updated", updateUser));
+    }
+
+    @DeleteMapping("/{username}")
+    @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
+    @Operation(summary = "Delete user")
+    @PreAuthorize("hasAuthority('Admin')")
+    public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("username") String username) throws TicketingProjectException {
+        userService.delete(username);
+        return ResponseEntity.ok(new ResponseWrapper("Successfully deleted"));
+    }
+    @GetMapping("/role")
+    @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
+    @Operation(summary = "Read user by role")
+    @PreAuthorize("hasAnyAuthority('Admin','Manager')")
+    public ResponseEntity<ResponseWrapper> readByRole(@RequestParam String role) {
+        List<UserDTO> userList = userService.listAllByRole(role);
+        return ResponseEntity.ok(new ResponseWrapper("Successfully read users by role", userList));
     }
 
     private MailDTO createEmail(UserDTO userDTO) {
