@@ -45,61 +45,57 @@ public class UserController {
     @PostMapping("/create-user")
     @Operation(summary = "Create new account")
     @PreAuthorize("hasAuthority('Admin')")
-    private ResponseEntity<ResponseWrapper> doRegister(@RequestBody UserDTO userDTO) throws TicketingProjectException {
-
+    public ResponseEntity<ResponseWrapper> doRegister(@RequestBody UserDTO userDTO) throws TicketingProjectException {
         UserDTO createdUser = userService.save(userDTO);
-
         sendEmail(createEmail(createdUser));
-
         return ResponseEntity.ok(new ResponseWrapper("User has been created!", createdUser));
     }
 
     @GetMapping
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
-    @Operation(summary = "Read all users")
+    @Operation(summary = "Read All Users")
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ResponseWrapper> readAll() {
-
-        // business logic - data
-
         List<UserDTO> result = userService.listAllUsers();
-        return ResponseEntity.ok(new ResponseWrapper("Successfully retrieved the users", result));
-
+        return ResponseEntity.ok(new ResponseWrapper("Successfully retrieved users", result));
     }
 
     @GetMapping("/{username}")
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
-    @Operation(summary = "Read user")
+    @Operation(summary = "Read All Users")
+    //Only admin should see other profiles or current user can see his/her profile
     public ResponseEntity<ResponseWrapper> readByUsername(@PathVariable("username") String username) {
-
         UserDTO user = userService.findByUserName(username);
-        return ResponseEntity.ok(new ResponseWrapper("Successfully retrieved the user", user));
+        return ResponseEntity.ok(new ResponseWrapper("Successfully retrieved user", user));
     }
 
     @PutMapping
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
-    @Operation(summary = "Update user")
+    @Operation(summary = "Update User")
     public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO user) throws TicketingProjectException {
-        UserDTO updateUser = userService.update(user);
-        return ResponseEntity.ok(new ResponseWrapper("Successfully updated", updateUser));
+        UserDTO updatedUser = userService.update(user);
+        return ResponseEntity.ok(new ResponseWrapper("Successfully updated", updatedUser));
     }
+
 
     @DeleteMapping("/{username}")
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
-    @Operation(summary = "Delete user")
+    @Operation(summary = "Delete User")
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("username") String username) throws TicketingProjectException {
         userService.delete(username);
         return ResponseEntity.ok(new ResponseWrapper("Successfully deleted"));
     }
+
     @GetMapping("/role")
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
-    @Operation(summary = "Read user by role")
+    @Operation(summary = "Delete User")
     @PreAuthorize("hasAnyAuthority('Admin','Manager')")
     public ResponseEntity<ResponseWrapper> readByRole(@RequestParam String role) {
         List<UserDTO> userList = userService.listAllByRole(role);
         return ResponseEntity.ok(new ResponseWrapper("Successfully read users by role", userList));
     }
+
 
     private MailDTO createEmail(UserDTO userDTO) {
 
@@ -130,4 +126,5 @@ public class UserController {
         confirmationTokenService.sendEmail(mailMessage);
 
     }
+
 }
