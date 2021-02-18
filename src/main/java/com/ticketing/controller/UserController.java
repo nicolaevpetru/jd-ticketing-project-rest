@@ -16,10 +16,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -44,6 +44,7 @@ public class UserController {
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
     @PostMapping("/create-user")
     @Operation(summary = "Create new account")
+    @PreAuthorize("hasAuthority('Admin')")
     private ResponseEntity<ResponseWrapper> doRegister(@RequestBody UserDTO userDTO) throws TicketingProjectException {
 
         UserDTO createdUser = userService.save(userDTO);
@@ -51,6 +52,19 @@ public class UserController {
         sendEmail(createEmail(createdUser));
 
         return ResponseEntity.ok(new ResponseWrapper("User has been created!", createdUser));
+    }
+
+    @GetMapping
+    @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
+    @Operation(summary = "Read all users")
+    @PreAuthorize("hasAuthority('Admin')")
+    public ResponseEntity<ResponseWrapper> readAll() {
+
+        // business logic - data
+
+        List<UserDTO> result = userService.listAllUsers();
+        return ResponseEntity.ok(new ResponseWrapper("Successfully retrieved the users", result));
+
     }
 
     private MailDTO createEmail(UserDTO userDTO) {
