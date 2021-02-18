@@ -67,6 +67,15 @@ public class UserController {
 
     }
 
+    @GetMapping("/{username}")
+    @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
+    @Operation(summary = "Read all users")
+    public ResponseEntity<ResponseWrapper> readByUsername(@PathVariable("username") String username) {
+
+        UserDTO user = userService.findByUserName(username);
+        return ResponseEntity.ok(new ResponseWrapper("Successfully retrieved the user", user));
+    }
+
     private MailDTO createEmail(UserDTO userDTO) {
 
         User user = mapperUtil.convert(userDTO, new User());
