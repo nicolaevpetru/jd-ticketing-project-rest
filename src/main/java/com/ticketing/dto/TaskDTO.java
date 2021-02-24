@@ -10,8 +10,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer"},ignoreUnknown = true)
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"}, ignoreUnknown = true)
 public class TaskDTO {
+
     private Long id;
     private ProjectDTO project;
     private UserDTO assignedEmployee;

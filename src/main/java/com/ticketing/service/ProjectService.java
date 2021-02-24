@@ -1,26 +1,26 @@
 package com.ticketing.service;
 
+
 import com.ticketing.dto.ProjectDTO;
-import com.ticketing.entity.Project;
 import com.ticketing.entity.User;
+import com.ticketing.exception.TicketingProjectException;
 
 import java.util.List;
 
 public interface ProjectService {
 
     ProjectDTO getByProjectCode(String code);
-
     List<ProjectDTO> listAllProjects();
 
-    Project save(ProjectDTO dto);
+    ProjectDTO save(ProjectDTO dto) throws TicketingProjectException;
 
-    void update(ProjectDTO dto);
+    ProjectDTO update(ProjectDTO dto) throws TicketingProjectException;
 
-    void delete(String code);
+    void delete(String code) throws TicketingProjectException;
 
-    void complete(String projectCode);
+    ProjectDTO complete(String projectCode) throws TicketingProjectException;
 
-    List<ProjectDTO> listAllProjectDetails();
+    List<ProjectDTO> listAllProjectDetails() throws TicketingProjectException;
 
     List<ProjectDTO> readAllByAssignedManager(User user);
 

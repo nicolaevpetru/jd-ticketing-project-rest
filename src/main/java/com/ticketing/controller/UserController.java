@@ -7,10 +7,10 @@ import com.ticketing.entity.ConfirmationToken;
 import com.ticketing.entity.ResponseWrapper;
 import com.ticketing.entity.User;
 import com.ticketing.exception.TicketingProjectException;
-import com.ticketing.mapper.MapperUtil;
 import com.ticketing.service.ConfirmationTokenService;
 import com.ticketing.service.RoleService;
 import com.ticketing.service.UserService;
+import com.ticketing.util.MapperUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +19,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -62,9 +63,9 @@ public class UserController {
 
     @GetMapping("/{username}")
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
-    @Operation(summary = "Read All Users")
+    @Operation(summary = "Read by username")
     //Only admin should see other profiles or current user can see his/her profile
-    public ResponseEntity<ResponseWrapper> readByUsername(@PathVariable("username") String username) {
+    public ResponseEntity<ResponseWrapper> readByUsername(@PathVariable("username") String username) throws AccessDeniedException {
         UserDTO user = userService.findByUserName(username);
         return ResponseEntity.ok(new ResponseWrapper("Successfully retrieved user", user));
     }
@@ -72,7 +73,7 @@ public class UserController {
     @PutMapping
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
     @Operation(summary = "Update User")
-    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO user) throws TicketingProjectException {
+    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO user) throws TicketingProjectException, AccessDeniedException {
         UserDTO updatedUser = userService.update(user);
         return ResponseEntity.ok(new ResponseWrapper("Successfully updated", updatedUser));
     }
@@ -89,7 +90,7 @@ public class UserController {
 
     @GetMapping("/role")
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
-    @Operation(summary = "Delete User")
+    @Operation(summary = "Read by role")
     @PreAuthorize("hasAnyAuthority('Admin','Manager')")
     public ResponseEntity<ResponseWrapper> readByRole(@RequestParam String role) {
         List<UserDTO> userList = userService.listAllByRole(role);

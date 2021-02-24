@@ -1,40 +1,40 @@
 package com.ticketing.service;
 
+
 import com.ticketing.dto.ProjectDTO;
 import com.ticketing.dto.TaskDTO;
-import com.ticketing.entity.Task;
 import com.ticketing.entity.User;
 import com.ticketing.enums.Status;
+import com.ticketing.exception.TicketingProjectException;
 
 import java.util.List;
 
 public interface TaskService {
 
-    TaskDTO findById(Long id);
+    TaskDTO findById(Long id) throws TicketingProjectException;
 
     List<TaskDTO> listAllTasks();
 
-    Task save(TaskDTO dto);
+    TaskDTO save(TaskDTO dto);
 
-    void update(TaskDTO dto);
+    TaskDTO update(TaskDTO dto) throws TicketingProjectException;
 
-    void delete(long id);
+    void delete(long id) throws TicketingProjectException;
 
     int totalNonCompletedTasks(String projectCode);
-
     int totalCompletedTasks(String projectCode);
 
     void deleteByProject(ProjectDTO project);
 
     List<TaskDTO> listAllByProject(ProjectDTO project);
 
-    List<TaskDTO> listAllTasksByStatusIsNot(Status status);
+    List<TaskDTO> listAllTasksByStatusIsNot(Status status) throws TicketingProjectException;
 
-    List<TaskDTO> listAllTasksByProjectManager();
+    List<TaskDTO> listAllTasksByProjectManager() throws TicketingProjectException;
 
-    void updateStatus(TaskDTO dto);
+    TaskDTO updateStatus(TaskDTO dto) throws TicketingProjectException;
 
-    List<TaskDTO> listAllTasksByStatus(Status status);
+//    List<TaskDTO> listAllTasksByStatus(Status status);
 
-    List<TaskDTO> readAllByEmployee(User user);
+    List<TaskDTO> readAllByEmployee(User assignedEmployee);
 }

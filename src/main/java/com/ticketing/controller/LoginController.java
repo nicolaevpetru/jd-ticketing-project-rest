@@ -1,25 +1,24 @@
 package com.ticketing.controller;
 
 import com.ticketing.annotation.DefaultExceptionMessage;
-import com.ticketing.dto.MailDTO;
 import com.ticketing.dto.UserDTO;
 import com.ticketing.entity.ConfirmationToken;
 import com.ticketing.entity.ResponseWrapper;
 import com.ticketing.entity.User;
 import com.ticketing.entity.common.AuthenticationRequest;
 import com.ticketing.exception.TicketingProjectException;
-import com.ticketing.mapper.MapperUtil;
 import com.ticketing.service.ConfirmationTokenService;
 import com.ticketing.service.UserService;
 import com.ticketing.util.JWTUtil;
+import com.ticketing.util.MapperUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.AccessDeniedException;
 
 @RestController
 @Tag(name = "Authentication Controller", description = "Authenticate API")
@@ -42,7 +41,7 @@ public class LoginController {
     @PostMapping("/authenticate")
     @DefaultExceptionMessage(defaultMessage = "Bad Credentials")
     @Operation(summary = "Login to application")
-    public ResponseEntity<ResponseWrapper> doLogin(@RequestBody AuthenticationRequest authenticationRequest) throws TicketingProjectException {
+    public ResponseEntity<ResponseWrapper> doLogin(@RequestBody AuthenticationRequest authenticationRequest) throws TicketingProjectException, AccessDeniedException {
 
         String password = authenticationRequest.getPassword();
         String username = authenticationRequest.getUsername();
