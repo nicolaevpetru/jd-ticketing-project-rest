@@ -1,0 +1,1 @@
+[INFO ] 2021-02-24 21:11:02.696 [http-nio-8081-exec-3] PerformanceAspect - Time taken to execute : 141 ms (Method : LoginController.doLogin(..) - Parameters : [AuthenticationRequest(username=admin@admin.com, password=admin)]
