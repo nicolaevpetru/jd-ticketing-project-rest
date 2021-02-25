@@ -1,6 +1,7 @@
 package com.ticketing.controller;
 
 import com.ticketing.annotation.DefaultExceptionMessage;
+import com.ticketing.annotation.ExecutionTime;
 import com.ticketing.dto.UserDTO;
 import com.ticketing.entity.ConfirmationToken;
 import com.ticketing.entity.ResponseWrapper;
@@ -41,6 +42,7 @@ public class LoginController {
     @PostMapping("/authenticate")
     @DefaultExceptionMessage(defaultMessage = "Bad Credentials")
     @Operation(summary = "Login to application")
+    @ExecutionTime
     public ResponseEntity<ResponseWrapper> doLogin(@RequestBody AuthenticationRequest authenticationRequest) throws TicketingProjectException, AccessDeniedException {
 
         String password = authenticationRequest.getPassword();
