@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -72,7 +71,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    public void fivenToken_getAllProjects() throws Exception {
+    public void givenToken_getAllProjects() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/project")
                 .header("Authorization", token)
                 .accept(MediaType.APPLICATION_JSON)
